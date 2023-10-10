@@ -36,9 +36,10 @@ if (isset($_FILES['image'])) {
     <title>Facebook</title>
     <link rel="shortcut icon" href="images/fb.ico" type="image/x-icon">
     <style>
-    <?php include "main.css";
-    ?><?php include "header.css";
-    ?>
+        <?php
+        include "main.css";
+        include "header.css";
+        ?>
     </style>
 </head>
 
@@ -46,8 +47,7 @@ if (isset($_FILES['image'])) {
     <?php include "header.php"; ?>
     <div class="main-container">
         <div class="left-container">
-            <a href="profile.php"><span class="left-list"><span><img src="images/<?php echo $image; ?>"
-                            alt="Profile Picture"></span><?php echo $row['fname'] . " " . $row['lname']; ?></span></a>
+            <a href="profile.php"><span class="left-list"><span><img src="images/<?php echo $image; ?>" alt="Profile Picture"></span><?php echo $user_name; ?></span></a>
             <span class="left-list"><span><i class="fa-solid fa-user-group fa-xl"></i></span>Friends</span>
             <span class="left-list"><span><i class="fa-solid fa-clock-rotate-left fa-xl"></i></span>Most Recent</span>
             <span class="left-list"><span><i class="fa-solid fa-users fa-lg"></i></span>Groups</span>
@@ -66,16 +66,14 @@ if (isset($_FILES['image'])) {
             <span class="left-list"><span><i class="fa-solid fa-gamepad fa-xl"></i></span>Gaming Video</span>
             <span class="left-list"><span><i class="fa-brands fa-youtube fa-xl blood"></i></span>Live video</span>
             <span class="left-list"><span><i class="fa-regular fa-clock fa-xl "></i></span>Memories</span>
-            <span class="left-list"><span><i
-                        class="fa-brands fa-facebook-messenger fa-xl purple"></i></span>Messenger</span>
+            <span class="left-list"><span><i class="fa-brands fa-facebook-messenger fa-xl purple"></i></span>Messenger</span>
             <span class="left-list"><span><i class="fa-brands fa-facebook-messenger fa-xl yellow"></i></span>Messenger
                 Kids</span>
             <span class="left-list"><span><i class="fa-solid fa-flag fa-xl orange"></i></span>Pages</span>
             <span class="left-list"><span><i class="fa-solid fa-gamepad fa-xl"></i></span>Play games</span>
             <span class="left-list"><span><i class="fa-solid fa-rectangle-ad fa-xl"></i></span>Recent ad activity</span>
             <span class="left-list"><span><i class="fa-solid fa-bookmark fa-xl purple"></i></span>Saved</span>
-            <span class="left-list"><span><span id="less"><i class="fa-solid fa-angle-up fa-xl"></i></span></span>See
-                less</span>
+            <span class="left-list"><span><span id="less"><i class="fa-solid fa-angle-up fa-xl"></i></span></span>See less</span>
         </div>
 
         <div class="upload-pop">
@@ -86,8 +84,7 @@ if (isset($_FILES['image'])) {
                 <div class="upload-container">
                     <form action="main.php" method="POST" enctype="multipart/form-data">
                         <input class='form' id="img-up" type="file" name="image" onchange="readURL(this);" />
-                        <input class="upload-content" placeholder="What's on your mind, <?php echo $row['fname'] ?>?"
-                            type="text" name="content">
+                        <input class="upload-content" placeholder="What's on your mind, <?php echo $row['fname'] ?>?" type="text" name="content">
                         <input class='form' id="up-btn" type="submit">
                     </form>
 
@@ -105,8 +102,7 @@ if (isset($_FILES['image'])) {
 
             <div class="post">
                 <div class="post-detail">
-                    <a href="profile.php"> <img id="profile" src="images/<?php echo $image; ?>"
-                            alt="Profile Picture"></a>
+                    <a href="profile.php"> <img id="profile" src="images/<?php echo $image; ?>" alt="Profile Picture"></a>
                     <div class="upload-trigger show">What's on your mind, <?php echo $row['fname'] ?>?</div>
                 </div>
                 <div class="post-content"></div>
@@ -147,137 +143,140 @@ if (isset($_FILES['image'])) {
 
 </body>
 <script src="https://kit.fontawesome.com/b43c7b4525.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"
-    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script>
-// post displaying script    ********************************
-var page = 0; // Initial page number
-var load = true;
+    // posts displaying script    ********************************
+    var page = 0; // Initial page number
+    var load = true;
 
-function loadMorePosts() {
-    load = false;
-    $.ajax({
-        url: 'posts.php', // Replace with your server-side script
-        type: 'GET',
-        data: {
-            page: page
-        },
-        success: function(data) {
-            if (data.length <= 0) {
-                $('.center-container').append(
-                    '<p id="no_result">There are no more posts to show right now</p>'
-                ); // Append the loaded posts to the container
-                load = false;
-            } else {
-                $('.center-container').append(data); // Append the loaded posts to the container
-                page = page + 10; // Increment the page number
-                load= true;
+    function loadMorePosts() {
+        load = false;
+        $.ajax({
+            url: 'posts.php', // Replace with your server-side script
+            type: 'GET',
+            data: {
+                page: page
+            },
+            success: function(data) {
+                if (data.length <= 0) {
+                    $('.center-container').append(
+                        '<p id="no_result">There are no more posts to show right now</p>'
+                    ); // Append no more post message
+                    load = false;
+                } else {
+                    $('.center-container').append(data); // Append the loaded posts to the container
+                    page = page + 10; // Increment the page number
+                    load = true;
 
+                }
+            }
+        });
+    }
+
+    // Initial load
+    loadMorePosts();
+
+    // Load more on scroll
+    $(window).scroll(function() {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            if (load) {
+                loadMorePosts();
             }
         }
     });
-}
 
-// Initial load
-loadMorePosts();
+    $(document).ready(function() {
+        // profile click to show profile menu
+        $("#profile").click(function() {
+            $(".profile-pop").toggle();
+        });
+        // hide profile menu
+        $(".main-container").click(function() {
+            $(".profile-pop").hide();
+        });
+        // remove post from dom not from database
+        $(document).on("click", '.remove_post', function(event) {
+            let text = "Do you want to Remove Post";
+            if (confirm(text) == true) {
+                $(this).parent().hide();
+            }
+        });
 
-// Load more on scroll
-$(window).scroll(function() {
-    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-        if (load) {
-            loadMorePosts();
-        }
-    }
-});
+        //post uploading script
 
-$(document).ready(function() {
-    // profile click
-    $("#profile").click(function() {
-        $(".profile-pop").toggle();
-    });
-    $(".main-container").click(function() {
-        $(".profile-pop").hide();
-    });
-    // remove post
-    $(document).on("click", '.remove_post', function(event) {
-        let text = "Do you want to Remove Post";
-        if (confirm(text) == true) {
-            $(this).parent().hide();
-        }
-    });
-
-    //post uploading script
-
-
-    $(document).keydown(function(event) {
-        if (event.keyCode === 27) {
+        // if escape key on keyboard is pressed upload container and profile menu will hide
+        $(document).keydown(function(event) {
+            if (event.keyCode === 27) {
+                // $("#img-up").val("");
+                $(".upload-pop").removeClass("flex");
+                // $('.upload-img-container').hide();
+                $(".profile-pop").hide();
+            }
+        });
+        // show upload container on click
+        $(".show").click(function() {
+            $(".upload-pop").addClass("flex");
+        })
+        // hide upload container on click
+        $(".cancel").click(function() {
             // $("#img-up").val("");
             $(".upload-pop").removeClass("flex");
             // $('.upload-img-container').hide();
-            $(".profile-pop").hide();
-        }
-    });
-    $(".show").click(function() {
-        $(".upload-pop").addClass("flex");
-    })
-    $(".cancel").click(function() {
-        // $("#img-up").val("");
-        $(".upload-pop").removeClass("flex");
-        // $('.upload-img-container').hide();
-    })
-    $(".upload-btn").click(function() {
-        $("#img-up").click();
-    })
-
-    $(document).on("click", '.upload-button2', function(event) {
-        $("#up-btn").click();
-    });
-
-    $('.upload-content').keydown(function(event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-    $('.remove-img').click(function() {
-        $("#img-up").val("");
-        $('.upload-img-container').hide();
-        $(".upload-button2").addClass('save');
-        $(".save").removeClass('upload-button2');
-    })
-
-    $(document).on("click", '.like', function(event) {
-        $(this).addClass('disable');
-        var postId = $(this).attr('id');
-        var likeCountElement = $(this).parent().siblings('.like-container').find('span');
-        // Check if the post is liked or not
-        var isLiked = $(this).hasClass('liked');
-        // Perform an AJAX request to the PHP backend
-        $.ajax({
-            url: 'like_post.php', // Replace with your PHP backend endpoint
-            method: 'POST',
-            data: {
-                post_id: postId,
-                action: isLiked ? 'dislike' : 'like'
-            },
-            success: function(response) {
-                // if (response.success) {
+        })
+        // click to trigger file input for post upload
+        $(".upload-btn").click(function() {
+            $("#img-up").click();
+        })
+        // trigger submit upload post form
+        $(document).on("click", '.upload-button2', function(event) {
+            $("#up-btn").click();
+        });
+        // prement upload form submission on enter key of keyboard
+        $('.upload-content').keydown(function(event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+        // hide and remove image choosen for upload and also change uplaod trigger button class to disable form submission
+        $('.remove-img').click(function() {
+            $("#img-up").val("");
+            $('.upload-img-container').hide();
+            $(".upload-button2").addClass('save');
+            $(".save").removeClass('upload-button2');
+        })
+        // script for liking and disliking post
+        $(document).on("click", '.like', function(event) {
+            $(this).addClass('disable');//disable click event while calling like request
+            var postId = $(this).attr('id');
+            var likeCountElement = $(this).parent().siblings('.like-container').find('span');
+            // Check if the post is liked or not
+            var isLiked = $(this).hasClass('liked');
+            // Perform an AJAX request to the PHP backend
+            $.ajax({
+                url: 'like_post.php', // Replace with your PHP backend endpoint
+                method: 'POST',
+                data: {
+                    post_id: postId,
+                    action: isLiked ? 'dislike' : 'like'
+                },
+                success: function(response) {
+                    // if (response.success) {
                     // Toggle the 'liked' class on the button
-                    if(!isLiked){
+                    if (!isLiked) {
                         $(this).toggleClass('liked', !isLiked);
                         $(this).children().removeClass('fa-regular');
                         $(this).children().addClass('fa-solid');
-                    }
-                    else{
+                    } else {
                         $(this).toggleClass('liked', !isLiked);
                         $(this).children().removeClass('fa-solid');
                         $(this).children().addClass('fa-regular');
                     }
-                    if(response==0){
+                    if (response == 0) {
                         $(this).parent().siblings('.like-container').remove();
                         $(this).parent().siblings('#hr').remove();
                     }
-                    if(response==1){
+                    if (response == 1) {
                         $(this).parent().siblings('.like-container').remove();
                         $(this).parent().siblings('#hr').remove();
                         $(this).parent().before(`<div class="like-container">
@@ -288,39 +287,39 @@ $(document).ready(function() {
                     var likeCountElement = $(this).parent().siblings('.like-container').find('span');
                     likeCountElement.text(response);
                     $(this).removeClass('disable');
-            }.bind(this)
+                }.bind(this)
+            });
         });
     });
-});
 
+    // enable upload trigger button when image is selected for uploading
+    function readURL(input) {
+        $(".save").addClass('upload-button2');
+        $(".upload-button2").removeClass('save');
+        $('.upload-img-container').show();
 
-function readURL(input) {
-    $(".save").addClass('upload-button2');
-    $(".upload-button2").removeClass('save');
-    $('.upload-img-container').show();
+        var filePath = input.value;
 
-    var filePath = input.value;
+        // Allowing file type
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
-    // Allowing file type
-    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-
-    if (!allowedExtensions.exec(filePath)) {
-        alert('Invalid file type');
-        input.value = '';
-        $('.upload-img-container').hide();
-        $(".upload-button2").addClass('save');
-        $(".save").removeClass('upload-button2');
-        return false;
-    } else {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('.image-prev').attr('src', e.target.result);
-            };
-            reader.readAsDataURL(input.files[0]);
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            input.value = '';
+            $('.upload-img-container').hide();
+            $(".upload-button2").addClass('save');
+            $(".save").removeClass('upload-button2');
+            return false;
+        } else {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.image-prev').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     }
-}
 </script>
 
 </html>

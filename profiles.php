@@ -51,23 +51,7 @@ if(!isset($_SESSION["user"])){
         <div class="user-name">
             <div class="name">
                 <h1><?php echo $row['fname']." ".$row['lname'];?></h1>
-                <?php/*
-                $str = $row['email'];
-                $name=(explode("@",$str));
-                $table=$name[0];
-                $query="SELECT * FROM `$table`";
-                $friends=mysqli_query($conn,$query);
-                if(mysqli_num_rows($friends)<1){
-                    $number=0;
-                }
-                else{
-                $number=mysqli_num_rows($friends);
-                }
-
-                $str2=$_SESSION['user'];
-                $name2=explode("@",$str2);
-                $user2=$name2[0];*/
-                ?>
+                
                 <p><?php //echo $number;?> 0 friends</p>
             </div>
             <div class="buttons">

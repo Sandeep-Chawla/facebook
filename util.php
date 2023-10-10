@@ -52,7 +52,7 @@ The email address or mobile number you entered isn't connected to an account. Fi
 <?php
 // otp verification on email
 
-php // mail TO
+// mail TO
 $new_psw=substr(str_shuffle("1234567890"), 0,8); 
 $message='Your Password is : '.$new_psw;      
 $subject = "harsh it solutions";
