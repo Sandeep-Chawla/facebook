@@ -45,7 +45,7 @@ if(!isset($_SESSION["user"])){
     ?>
     <div class="container">
         <div class="image">
-            <img src="images/image3.webp" alt="" srcset="">
+            <img src="images/banner.jpeg" alt="" srcset="">
             <div class="profile-img"><img src="images/<?php echo $image;?>" alt="" srcset=""></div>
         </div>
         <div class="user-name">
