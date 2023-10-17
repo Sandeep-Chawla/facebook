@@ -39,7 +39,7 @@ if ($row['image'] == "") {
         <div class="profile">
             <span><i class="fa-solid fa-bars fa-xl"></i></span>
             <span id="menu2"><i class="fa-solid fa-plus fa-xl"></i></span>
-            <span><i class="fa-brands fa-facebook-messenger fa-xl"></i></span>
+            <span id="messenger"><i class="fa-brands fa-facebook-messenger fa-xl"></i></span>
             <span><i class="fa-solid fa-bell fa-xl"></i></span>
             <img id="profile" src="images/<?php echo $image; ?>" alt="Profile Picture">
         </div>

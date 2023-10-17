@@ -115,7 +115,7 @@ if (isset($_FILES['image'])) {
             </div>
         </div>
         <div class="right-container">
-            <span class="right-list contacts">Contacts<i class="fa-solid fa-magnifying-glass"></i>
+            <span class="contacts">Contacts<i class="fa-solid fa-magnifying-glass"></i>
                 <i class="fa-solid fa-ellipsis"></i></span>
             <?php
             $servername = "localhost";
@@ -134,9 +134,46 @@ if (isset($_FILES['image'])) {
                 } else {
                     $image = $row['image'];
                 }
-                echo '<a href="profiles.php?name=' . $row['email'] . '"><span class="right-list"><span><span class="user-img"><img src="images/' . $image . '"alt="Profile Picture"></span></span>' . $row['fname'] . ' ' . $row['lname'] . '</span></a>';
+                echo '<span class="right-list" " data="' . $row['user_id'] . '"><span class="user-img"><img src="images/' . $image . '"alt="Profile Picture"></span><p>' . $row['fname'] . ' ' . $row['lname'] . '</p></span></a>';
             }
             ?>
+        </div>
+    </div>
+    <div class="chat-container" id='myDiv' tabindex="0">
+        <div class="chat-scroll"><i class="fa-solid fa-circle-arrow-down blue"></i></div>
+        <div class="chat-header">
+            <a href="">
+                <div class="chat-receiver">
+                    <div class="chat-img">
+                        <img src="images/16profile.jpg" alt="">
+                    </div>
+                    <div class="chatname-container">
+                        <div class="chat-name">Sumit Seth</div>
+                        <div class="chat-status">Active now</div>
+                    </div>
+                    <i class="fa-solid fa-angle-down ml-8 blue"></i>
+                </div>
+            </a>
+            <div class="chat-navs">
+                <i class="fa-solid fa-phone blue"></i>
+                <i class="fa-solid fa-video blue"></i>
+                <i class="fa-solid fa-minus blue"></i>
+                <i class="fa-solid fa-x blue chat-close"></i>
+            </div>
+        </div>
+        <div class="chat-messages">
+
+        </div>
+        <div class="chat-footer">
+            <div class="left-navs center">
+                <i class="fa-solid fa-circle-plus blue"></i>
+            </div>
+            <div class="msg-input">
+
+                <textarea name="message" id="message"></textarea>
+                <i class="fa-solid fa-face-smile center blue"></i>
+            </div>
+            <div class="chat-send center"><i class="fa-solid fa-location-arrow blue"></i></div>
         </div>
     </div>
 
@@ -145,6 +182,7 @@ if (isset($_FILES['image'])) {
 <script src="https://kit.fontawesome.com/b43c7b4525.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script>
+    let myInterval;
     // posts displaying script    ********************************
     var page = 0; // Initial page number
     var load = true;
@@ -152,7 +190,7 @@ if (isset($_FILES['image'])) {
     function loadMorePosts() {
         load = false;
         $.ajax({
-            url: 'posts.php', // Replace with your server-side script
+            url: 'posts.php',
             type: 'GET',
             data: {
                 page: page
@@ -204,15 +242,23 @@ if (isset($_FILES['image'])) {
 
         //post uploading script
 
-        // if escape key on keyboard is pressed upload container and profile menu will hide
+        // if escape key on keyboard is pressed upload container and profile menu will hide also chat will hide if in focus
         $(document).keydown(function(event) {
             if (event.keyCode === 27) {
+                if ($('.chat-container').is(':focus')) {
+                    $('.chat-container').hide();
+                    clearInterval(myInterval);
+                }
                 // $("#img-up").val("");
                 $(".upload-pop").removeClass("flex");
                 // $('.upload-img-container').hide();
                 $(".profile-pop").hide();
             }
         });
+        $('.chat-close').click(function() {
+            $('.chat-container').hide();
+            clearInterval(myInterval);
+        })
         // show upload container on click
         $(".show").click(function() {
             $(".upload-pop").addClass("flex");
@@ -247,7 +293,7 @@ if (isset($_FILES['image'])) {
         })
         // script for liking and disliking post
         $(document).on("click", '.like', function(event) {
-            $(this).addClass('disable');//disable click event while calling like request
+            $(this).addClass('disable'); //disable click event while calling like request
             var postId = $(this).attr('id');
             var likeCountElement = $(this).parent().siblings('.like-container').find('span');
             // Check if the post is liked or not
@@ -290,7 +336,84 @@ if (isset($_FILES['image'])) {
                 }.bind(this)
             });
         });
+
+        $('.right-list').click(function() {
+            let receiver = $(this).attr('data');
+            $(".chat-header a").attr("href", `profiles.php?name=${receiver}`);
+            let name = $(this).find('p').text()
+            let img = $(this).find('.user-img').html()
+            console.log(img)
+            $('.chat-name').text(name)
+            $('.chat-img').html(img)
+            $('.chat-container').show();
+            $('.chat-container').focus();
+            let chat = document.querySelector(".chat-messages")
+            myInterval = setInterval(messageload, 500);
+
+            function messageload() {
+                $.ajax({
+                    url: 'messages.php',
+                    type: 'GET',
+                    data: {
+                        receiver: receiver,
+                    },
+                    success: function(data) {
+                        $('.chat-messages').html(data)
+                    }
+                });
+                $('.chat-scroll').click(function() {
+                    chat.scrollTop = chat.scrollHeight
+                    chat.classList.remove("active");
+
+                })
+
+                if (chat.scrollHeight > chat.scrollTop + 370) {
+                    $('.chat-scroll').show()
+                } else {
+                    $('.chat-scroll').hide()
+                }
+                chat.onmouseenter = () => {
+                    chat.classList.add("active");
+                }
+
+                chat.onmouseleave = () => {
+                    if (chat.scrollHeight == Math.ceil(chat.scrollTop) + chat.offsetHeight) {
+                        chat.classList.remove("active");
+                    }
+                }
+                if (!chat.classList.contains("active")) {
+                    chat.scrollTop = chat.scrollHeight;
+                }
+            }
+            $('#message').keydown(function(e) {
+                let message=$(this).val();
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'send-chat.php',
+                    type: 'POST',
+                    data: {
+                        receiver: receiver,
+                        message:message
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
+                $(this).val("")
+            }
+            if (e.keyCode == 13 && e.ctrlKey) {
+                $(this).val(function(i, val) {
+                    return val + "\n"
+                })
+            }
+            this.style.height = '20px';
+            this.style.height = 20;
+            this.style.height = (this.scrollHeight > 124 ? 124 : this.scrollHeight) + "px";
+        })
+        })
     });
+
 
     // enable upload trigger button when image is selected for uploading
     function readURL(input) {

@@ -32,7 +32,7 @@ if(!isset($_SESSION["user"])){
         if(isset($_GET['name'])){
         $user=$_GET['name'];
         $conn = new mysqli($servername, $username, $password, $dbname);
-        $sql="SELECT * FROM `accounts` WHERE `email` LIKE '$user'";
+        $sql="SELECT * FROM `accounts` WHERE `user_id` = '$user'";
         $result=mysqli_query($conn,$sql);
         $row= mysqli_fetch_assoc($result);
         if($row['image']==""){
@@ -41,7 +41,8 @@ if(!isset($_SESSION["user"])){
         else{
             $image=$row['image'];
         }
-    }}
+    }
+}
     ?>
     <div class="container">
         <div class="image">

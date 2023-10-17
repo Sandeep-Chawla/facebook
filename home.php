@@ -91,6 +91,7 @@ if(isset($_POST['signup'])){
                 </div>';
                 } else {
                     echo "Email sending failed...";
+                    print_r(error_get_last());
                 }
             }   
         }
@@ -98,10 +99,6 @@ if(isset($_POST['signup'])){
     if(isset($_POST['otp'])){
         if($_POST['otp']==$_SESSION['otp']){
             $str = $_SESSION['mobile'];
-            $name=(explode("@",$str));
-            $table=$name[0];
-            $table_qry="create table $table(friend_id int UNIQUE)";
-            mysqli_query($conn, $table_qry);
                 $signup = mysqli_query($conn, $_SESSION['query']);
                 if($signup){
                     $sql3="SELECT * FROM `accounts` WHERE `email` LIKE '$str'";
