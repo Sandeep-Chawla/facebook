@@ -140,7 +140,7 @@ if (isset($_FILES['image'])) {
         </div>
     </div>
     <div class="chat-container" id='myDiv' tabindex="0">
-        <div class="chat-scroll"><i class="fa-solid fa-circle-arrow-down blue"></i></div>
+        <div class="chat-scroll"><i class="fa-solid fa-arrow-down blue"></i></div>
         <div class="chat-header">
             <a href="">
                 <div class="chat-receiver">
@@ -389,7 +389,8 @@ if (isset($_FILES['image'])) {
                 let message=$(this).val();
             if (e.keyCode == 13) {
                 e.preventDefault();
-                $.ajax({
+                if(message!=""){
+                    $.ajax({
                     url: 'send-chat.php',
                     type: 'POST',
                     data: {
@@ -400,6 +401,8 @@ if (isset($_FILES['image'])) {
                         console.log(data);
                     }
                 });
+
+                }
                 $(this).val("")
             }
             if (e.keyCode == 13 && e.ctrlKey) {
