@@ -1,9 +1,5 @@
-<?php $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sandeep";
+<?php
 $user = $_SESSION['user'];
-$conn = new mysqli($servername, $username, $password, $dbname);
 $sql = "SELECT * FROM `accounts` WHERE `email` LIKE '$user'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);

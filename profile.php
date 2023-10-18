@@ -2,14 +2,11 @@
 session_start();
 
 if(!isset($_SESSION["user"])){
-    header("Location: http://localhost/loginsystem/home.php");
+    header("Location: home.php");
 }
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "sandeep";
+       
         $user=$_SESSION['user'];
-        $conn = new mysqli($servername, $username, $password, $dbname);
+        include 'database.php';
         $sql="SELECT * FROM `accounts` WHERE `email` LIKE '$user'";
         $result=mysqli_query($conn,$sql);
         $row= mysqli_fetch_assoc($result);

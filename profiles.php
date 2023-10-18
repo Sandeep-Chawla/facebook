@@ -4,10 +4,7 @@ session_start();
 if(!isset($_SESSION["user"])){
     header("Location: http://localhost/loginsystem/home.php");
 }
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "sandeep";
+        include 'database.php';
         ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +28,6 @@ if(!isset($_SESSION["user"])){
     if($_SERVER["REQUEST_METHOD"] == "GET"){
         if(isset($_GET['name'])){
         $user=$_GET['name'];
-        $conn = new mysqli($servername, $username, $password, $dbname);
         $sql="SELECT * FROM `accounts` WHERE `user_id` = '$user'";
         $result=mysqli_query($conn,$sql);
         $row= mysqli_fetch_assoc($result);

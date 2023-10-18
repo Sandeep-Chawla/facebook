@@ -1,8 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sandeep";
+include 'database.php';
 $signerror="";
 $fname="";
 $lname="";
@@ -35,7 +32,6 @@ if( $imagefiles ) {
     $imagecount = count($imagefiles);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
-    $conn = new mysqli($servername, $username, $password, $dbname);
 if(isset($_POST['signup'])){
     if($conn){
         $fname=$_POST['fname'];
@@ -109,12 +105,6 @@ if(isset($_POST['signup'])){
                 </thead>
                 <tbody>
                     <?php
-                     $servername = "localhost";
-                     $username = "root";
-                     $password = "";
-                     $dbname = "sandeep";
-                // Create connection
-                $conn = new mysqli($servername, $username, $password, $dbname);
                  $sql = "SELECT * FROM `accounts`";
                  $result = mysqli_query($conn, $sql);
                  while($row = mysqli_fetch_assoc($result)){
