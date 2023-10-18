@@ -709,11 +709,10 @@ a {
   bottom: 80px;
   right: 30px;
 }
-.chat-scroll i{
-  background-color: #1876f2;
-}
 .chat-scroll i::before{
   font-size: 30px;
+  border-radius: 50%;
+  background-color: #fff;
 }
 .chat-name {
   color: rgb(5, 5, 5);

@@ -118,11 +118,6 @@ if (isset($_FILES['image'])) {
             <span class="contacts">Contacts<i class="fa-solid fa-magnifying-glass"></i>
                 <i class="fa-solid fa-ellipsis"></i></span>
             <?php
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "sandeep";
-            $conn = new mysqli($servername, $username, $password, $dbname);
             $sql = "SELECT * FROM `accounts`";
             $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_assoc($result)) {
@@ -140,7 +135,7 @@ if (isset($_FILES['image'])) {
         </div>
     </div>
     <div class="chat-container" id='myDiv' tabindex="0">
-        <div class="chat-scroll"><i class="fa-solid fa-arrow-down blue"></i></div>
+        <div class="chat-scroll"><i class="fa-solid fa-circle-arrow-down"></i></div>
         <div class="chat-header">
             <a href="">
                 <div class="chat-receiver">
@@ -284,6 +279,9 @@ if (isset($_FILES['image'])) {
                 return false;
             }
         });
+        $('.chat-send').click(function(){
+            
+        })
         // hide and remove image choosen for upload and also change uplaod trigger button class to disable form submission
         $('.remove-img').click(function() {
             $("#img-up").val("");
@@ -342,7 +340,6 @@ if (isset($_FILES['image'])) {
             $(".chat-header a").attr("href", `profiles.php?name=${receiver}`);
             let name = $(this).find('p').text()
             let img = $(this).find('.user-img').html()
-            console.log(img)
             $('.chat-name').text(name)
             $('.chat-img').html(img)
             $('.chat-container').show();
@@ -367,7 +364,7 @@ if (isset($_FILES['image'])) {
 
                 })
 
-                if (chat.scrollHeight > chat.scrollTop + 370) {
+                if (chat.scrollHeight > chat.scrollTop + 400) {
                     $('.chat-scroll').show()
                 } else {
                     $('.chat-scroll').hide()
@@ -385,10 +382,8 @@ if (isset($_FILES['image'])) {
                     chat.scrollTop = chat.scrollHeight;
                 }
             }
-            $('#message').keydown(function(e) {
-                let message=$(this).val();
-            if (e.keyCode == 13) {
-                e.preventDefault();
+            $('.chat-send').click(function(){
+                let message=$('#message').val();
                 if(message!=""){
                     $.ajax({
                     url: 'send-chat.php',
@@ -398,12 +393,18 @@ if (isset($_FILES['image'])) {
                         message:message
                     },
                     success: function(data) {
-                        console.log(data);
+                        
                     }
                 });
 
                 }
-                $(this).val("")
+                $('#message').val("")
+            })
+            $('#message').keydown(function(e) {
+                
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $('.chat-send').click()
             }
             if (e.keyCode == 13 && e.ctrlKey) {
                 $(this).val(function(i, val) {

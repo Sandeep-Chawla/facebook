@@ -20,8 +20,6 @@ if(!isset($_SESSION["user"])){
             $file_name = $_FILES['image']['name'];
             $file_tmp = $_FILES['image']['tmp_name'];
             $image=$user_id . $file_name;
-            $del_img ="images/".$oldimage;
-            unlink($del_img);
             move_uploaded_file($file_tmp,"images/".$image);
             $query="UPDATE `accounts` SET `image` = '$image' WHERE `accounts`.`email` = '$user'";
             mysqli_query($conn,$query);
