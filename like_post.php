@@ -1,6 +1,7 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: http://localhost/loginsystem/");
+require_once('functions.php');
+header("Access-Control-Allow-Origin: http://localhost/");
 header("Access-Control-Allow-Methods: POST");
 // Include database connection and necessary functions
 include "database.php";
@@ -8,8 +9,8 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
     $user_id=$_SESSION['userid'];
     // Get the post_id and action from the POST request
-    $post_id = $_POST['post_id'];
-    $action = $_POST['action'];
+    $post_id = test_input($_POST['post_id']);
+    $action = test_input($_POST['action']);
     
     $like_query="INSERT INTO `likes` (`user_id`, `post_id`) VALUES ('$user_id', '$post_id')";
     $dislike_query="DELETE from likes WHERE user_id='$user_id' AND post_id='$post_id'";

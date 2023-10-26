@@ -1,11 +1,12 @@
 <?php
 include 'database.php';
+require_once('functions.php');
 if($conn){
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = $_POST["user"];
-    $pass = $_POST["pass"];
-    $sql="SELECT * FROM `user` WHERE `user_name`='$user'";
+    $user = test_input($_POST["user"]);
+    $pass = test_input($_POST["pass"]);
+    $sql="SELECT * FROM `accounts` WHERE `email`='$user'";
     $result = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($result);
     if ($num >= 1){
@@ -13,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($pass==$row['password']){ 
                 session_start();
                 $_SESSION["uname"] = "admin";
-                header("Location: http://localhost/loginsystem/index.php");}
+                header("Location: admin.php");}
             else{
                 echo "wrong password";
             }

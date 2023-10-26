@@ -1,11 +1,12 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: http://localhost/loginsystem/");
+require_once('functions.php');
+header("Access-Control-Allow-Origin: http://localhost/");
 header("Access-Control-Allow-Methods: GET");
 include 'database.php';
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $sender=$_SESSION['userid'];
-    $receiver=$_GET['receiver'];
+    $receiver=test_input($_GET['receiver']);
 $qry="SELECT * FROM `messages` WHERE `sender` IN ('$sender','$receiver') AND `receiver` IN ('$sender','$receiver')";
 $result=mysqli_query($conn, $qry);
 $qry2="SELECT * FROM `accounts` WHERE `user_id` = '$receiver'";

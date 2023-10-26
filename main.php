@@ -1,4 +1,5 @@
 <?php
+require_once('functions.php');
 session_start();
 
 if (!isset($_SESSION["user"])) {
@@ -14,7 +15,7 @@ $user_name = $row['fname'] . " " . $row['lname'];
 $user_id = $_SESSION['userid'];
 //post upload script
 if (isset($_FILES['image'])) {
-    $content = $_POST['content'];
+    $content = test_input($_POST['content']);
     $file_name = $_FILES['image']['name'];
     $file_tmp = $_FILES['image']['tmp_name'];
     $uploadimage = $user_id . date("j\ofFYh-i-s") . $file_name;
@@ -240,7 +241,7 @@ if (isset($_FILES['image'])) {
         // if escape key on keyboard is pressed upload container and profile menu will hide also chat will hide if in focus
         $(document).keydown(function(event) {
             if (event.keyCode === 27) {
-                if ($('.chat-container').is(':focus')) {
+                if ($('.chat-container').is(':focus') || $('#message').is(':focus')) {
                     $('.chat-container').hide();
                     clearInterval(myInterval);
                 }
@@ -279,8 +280,8 @@ if (isset($_FILES['image'])) {
                 return false;
             }
         });
-        $('.chat-send').click(function(){
-            
+        $('.chat-send').click(function() {
+
         })
         // hide and remove image choosen for upload and also change uplaod trigger button class to disable form submission
         $('.remove-img').click(function() {
@@ -343,7 +344,7 @@ if (isset($_FILES['image'])) {
             $('.chat-name').text(name)
             $('.chat-img').html(img)
             $('.chat-container').show();
-            $('.chat-container').focus();
+            $('#message').focus();
             let chat = document.querySelector(".chat-messages")
             myInterval = setInterval(messageload, 500);
 
@@ -382,39 +383,42 @@ if (isset($_FILES['image'])) {
                     chat.scrollTop = chat.scrollHeight;
                 }
             }
-            $('.chat-send').click(function(){
-                let message=$('#message').val();
-                if(message!=""){
+            $('.chat-send').click(function() {
+                let message = $('#message').val();
+                if (message != "") {
                     $.ajax({
-                    url: 'send-chat.php',
-                    type: 'POST',
-                    data: {
-                        receiver: receiver,
-                        message:message
-                    },
-                    success: function(data) {
-                        
-                    }
-                });
+                        url: 'send-chat.php',
+                        type: 'POST',
+                        data: {
+                            receiver: receiver,
+                            message: message
+                        },
+                        success: function(data) {
+
+                        }
+                    });
 
                 }
                 $('#message').val("")
             })
             $('#message').keydown(function(e) {
-                
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                $('.chat-send').click()
-            }
-            if (e.keyCode == 13 && e.ctrlKey) {
-                $(this).val(function(i, val) {
-                    return val + "\n"
-                })
-            }
-            this.style.height = '20px';
-            this.style.height = 20;
-            this.style.height = (this.scrollHeight > 124 ? 124 : this.scrollHeight) + "px";
-        })
+
+                if (e.keyCode == 13) {
+                    if (e.keyCode == 13 && e.ctrlKey) {
+                        $(this).val(function(i, val) {
+                            return val + "\n"
+                        })
+                    } else {
+                        e.preventDefault();
+                        $('.chat-send').click()
+                    }
+                }
+            })
+            $('#message').keyup(function(e) {
+                this.style.height = '20px';
+                this.style.height = 20;
+                this.style.height = (this.scrollHeight > 124 ? 124 : this.scrollHeight) + "px";
+            })
         })
     });
 

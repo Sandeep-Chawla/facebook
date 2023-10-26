@@ -1,8 +1,9 @@
 <?php
+require_once('functions.php');
 session_start();
 
 if(!isset($_SESSION["user"])){
-    header("Location: http://localhost/loginsystem/home.php");
+    header("Location: home.php");
 }
         include 'database.php';
         ?>
@@ -27,7 +28,7 @@ if(!isset($_SESSION["user"])){
     <?php
     if($_SERVER["REQUEST_METHOD"] == "GET"){
         if(isset($_GET['name'])){
-        $user=$_GET['name'];
+        $user=test_input($_GET['name']);
         $sql="SELECT * FROM `accounts` WHERE `user_id` = '$user'";
         $result=mysqli_query($conn,$sql);
         $row= mysqli_fetch_assoc($result);

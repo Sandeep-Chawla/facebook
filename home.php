@@ -4,6 +4,7 @@ if(isset($_SESSION["user"])){
     header("Location: main.php");
 }
 include "database.php";
+require_once('functions.php');
 $usererror="";
 $passerror="";
 $user="";
@@ -21,14 +22,14 @@ $gender="";
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST['login'])){
     if($conn){
-        $user=$_POST["name"];
-        $pass=$_POST["pass"];
+        $user=test_input($_POST["name"]);
+        $pass=test_input($_POST["pass"]);
         $sql="SELECT * FROM `accounts` WHERE `email` LIKE '$user'";
         $result=mysqli_query($conn,$sql);
         if(mysqli_num_rows($result)>=1){
             $usererror="";
             while($row= mysqli_fetch_assoc($result)){
-                if($row['password']==$pass){
+                if(password_verify($pass,$row['password'])) {
                     $_SESSION['user']=$user;
                     $_SESSION['userid']=$row['user_id'];
                     header("Location: main.php");
@@ -45,14 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 if(isset($_POST['signup'])){
     if($conn){
-        $fname=$_POST['fname'];
-        $lname=$_POST['lname'];
-        $mobile=$_POST['mobile'];
-        $password=$_POST['password'];
-        $day=$_POST['day'];
-        $month=$_POST['month'];
-        $year=$_POST['year'];
-        $gender=$_POST['sex'];
+        $fname=test_input($_POST['fname']);
+        $lname=test_input($_POST['lname']);
+        $mobile=test_input($_POST['mobile']);
+        $password=password_hash(test_input($_POST['password']), PASSWORD_DEFAULT);
+        $day=test_input($_POST['day']);
+        $month=test_input($_POST['month']);
+        $year=test_input($_POST['year']);
+        $gender=test_input($_POST['sex']);
 
         $sql1="SELECT * FROM `accounts` WHERE `email` LIKE '$mobile'";
         $results=mysqli_query($conn,$sql1);

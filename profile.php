@@ -20,7 +20,7 @@ if(!isset($_SESSION["user"])){
             move_uploaded_file($file_tmp,"images/".$image);
             $query="UPDATE `accounts` SET `image` = '$image' WHERE `accounts`.`email` = '$user'";
             mysqli_query($conn,$query);
-            header("Location: http://localhost/loginsystem/profile.php");
+            header("Location: profile.php");
    }
 ?>
 <!DOCTYPE html>

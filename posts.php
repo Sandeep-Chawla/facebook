@@ -1,9 +1,10 @@
 <?php
+require_once('functions.php');
 session_start();
-header("Access-Control-Allow-Origin: http://localhost/loginsystem/");
+header("Access-Control-Allow-Origin: http://localhost/");
 header("Access-Control-Allow-Methods: GET");
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $skip = $_GET['page'];
+    $skip = test_input($_GET['page']);
 
     if (is_numeric($skip)) {
         // fetch posts from database - 10 posts per request and didn't repeat previous posts
