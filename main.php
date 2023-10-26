@@ -83,7 +83,7 @@ if (isset($_FILES['image'])) {
                 <div class="upload-txt">Create post</div>
                 <div class="line2"></div>
                 <div class="upload-container">
-                    <form action="main.php" method="POST" enctype="multipart/form-data">
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" enctype="multipart/form-data">
                         <input class='form' id="img-up" type="file" name="image" onchange="readURL(this);" />
                         <input class="upload-content" placeholder="What's on your mind, <?php echo $row['fname'] ?>?" type="text" name="content">
                         <input class='form' id="up-btn" type="submit">
